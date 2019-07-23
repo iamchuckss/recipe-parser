@@ -26,7 +26,7 @@ class XPath:
             elif key == "photo_url":
                 return value
             else:
-                raise ArgumentError("key not found.")
+                raise BaseException("key not found.")
     
     def ingredients_query(self, query):
         return self.tree.xpath(query)
