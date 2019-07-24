@@ -25,7 +25,6 @@ class General:
         photo_url = xpath.single_node_query('//meta[@property="og:image"]/@content', 'photo_url')
         if re.search("\.(jpeg|jpg)", photo_url, re.I):
             photo_url = TextUtils.url_relative_to_absolute(url, photo_url)
-            print(photo_url)
             recipe.photo_url = photo_url
 
         return recipe
