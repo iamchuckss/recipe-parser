@@ -1,4 +1,5 @@
 import re
+from urllib.parse import urljoin
 
 class TextUtils:
     @staticmethod
@@ -55,5 +56,6 @@ class TextUtils:
         str = re.sub("/(\d+)\s*-\s*(\d+)/", "$1-$2", str);
         return str
 
-        
-    
+    @staticmethod
+    def url_relative_to_absolute(base, rel):
+        return urljoin(base, rel)
