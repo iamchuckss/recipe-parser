@@ -3,11 +3,8 @@ from lxml import html
 from TextUtils import TextUtils
 
 class XPath:
-    def __init__(self, url):
-        self.url = url
-        pageContent= requests.get(url)
-        pageContent.encoding = pageContent.apparent_encoding
-        self.tree = html.fromstring(pageContent.content)
+    def __init__(self, html_content):
+        self.tree = html.fromstring(html_content)
     
     def single_node_query(self, query, key):
         nodes = self.tree.xpath(query)

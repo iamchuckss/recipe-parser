@@ -8,11 +8,11 @@ import re
 
 class Bonappetitcom:
     @staticmethod
-    def parse(url):
-        xpath = XPath(url)
+    def parse(html_content, url=None):
+        xpath = XPath(html_content)
 
         # use general parser to parse basic fields
-        recipe = General.parse(url)
+        recipe = General.parse(html_content)
 
         # Yield
         yields = xpath.single_node_query('//*[@id="react-app"]/div/div[2]/div[1]/div/div[1]/span[1]/span/text()[last()]', 'yields')

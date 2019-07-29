@@ -8,9 +8,9 @@ import re
 class General:
 
     @staticmethod
-    def parse(url):
+    def parse(html_content, url=None):
         recipe = Recipe()
-        xpath = XPath(url)
+        xpath = XPath(html_content)
 
         # Title
         title = xpath.single_node_query('//meta[@itemprop="og:title/@content"]', 'title')
