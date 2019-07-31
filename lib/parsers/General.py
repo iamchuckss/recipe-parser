@@ -5,27 +5,24 @@ from XPath import XPath
 from Recipe import Recipe
 import re
 
-class General:
+def parse(html_content, url=None):
+    recipe = Recipe()
+    xpath = XPath(html_content)
 
-    @staticmethod
-    def parse(html_content, url=None):
-        recipe = Recipe()
-        xpath = XPath(html_content)
+    # Title
+    title = xpath.single_node_query('//meta[@itemprop="og:title/@content"]', 'title')
+    if title == None:
+        title = xpath.single_node_query('//title/text()', 'title') 
+    if title == None:
+        title = "Recipe from {}".format(url) 
 
-        # Title
-        title = xpath.single_node_query('//meta[@itemprop="og:title/@content"]', 'title')
-        if title == None:
-           title = xpath.single_node_query('//title/text()', 'title') 
-        if title == None:
-           title = "Recipe from {}".format(url) 
+    recipe.title = title
 
-        recipe.title = title
+    # Photo
+    photo_url = xpath.single_node_query('//meta[@property="og:image"]/@content', 'photo_url')
+    if re.search("\.(jpeg|jpg)", photo_url, re.I):
+        photo_url = TextUtils.url_relative_to_absolute(url, photo_url)
+        recipe.photo_url = photo_url
 
-        # Photo
-        photo_url = xpath.single_node_query('//meta[@property="og:image"]/@content', 'photo_url')
-        if re.search("\.(jpeg|jpg)", photo_url, re.I):
-            photo_url = TextUtils.url_relative_to_absolute(url, photo_url)
-            recipe.photo_url = photo_url
-
-        return recipe
+    return recipe
 
