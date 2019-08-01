@@ -6,7 +6,7 @@ class XPath:
     def __init__(self, html_content):
         self.tree = html.fromstring(html_content)
     
-    def single_node_query(self, query, key):
+    def single_node_query(self, query, key=None):
         nodes = self.tree.xpath(query)
 
         if len(nodes) > 0:
@@ -23,7 +23,7 @@ class XPath:
             elif key == "photo_url":
                 return value
             else:
-                raise BaseException("key not found.")
+                return value
     
     def ingredients_query(self, query):
         return self.tree.xpath(query)
