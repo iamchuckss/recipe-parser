@@ -10,6 +10,14 @@ class TextUtils:
         return str
 
     @staticmethod
+    def format_title(title):
+        title = re.sub("/.+\s+recipes\s+[\:\|\-]\s+/i", "", title);
+        title = re.sub("/\s+[\:\|\-]\s+.+$/i", "", title);
+        title = re.sub("/\s+recipe\s*$/i", "", title);
+        title = re.sub("/^Recipe\s+for\s+/i", "", title);
+        return title.strip();
+
+    @staticmethod
     def convert_words_to_numbers(str):
         numbers = {
             'one' : 1,
