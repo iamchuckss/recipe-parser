@@ -1,5 +1,6 @@
 import re
 from urllib.parse import urljoin
+import dateutil.parser as dateutil_parser
 
 class TextUtils:
     @staticmethod
@@ -53,17 +54,42 @@ class TextUtils:
         str = TextUtils.convert_words_to_numbers(str)
 
         # Convert "serves ## into ## servings"
-        str = re.sub("/^serves (\d+ to \d+)(.*)$/i", "$1 servings$2", str)
-        str = re.sub("/^serves ([\d\-]+)(.*)$/i", "$1 servings$2", str)
-        str = re.sub("/^1 servings(.*)$/", "1 serving$1", str)
+        str = re.sub("^serves (\d+ to \d+)(.*)$", "$1 servings$2", str, re.I)
+        str = re.sub("^serves ([\d\-]+)(.*)$", "$1 servings$2", str, re.I)
+        str = re.sub("^1 servings(.*)$", "1 serving$1", str, re.I)
 
         # Remove leading "Yield:" or "Servings:"
-        str = re.sub("/^(yields?|servings|serves|makes about|makes)\:?\s+/", "", str);
+        str = re.sub("^(yields?|servings|serves|makes about|makes)\:?\s+", "", str, re.I);
 
         # Condense spaces around hyphens
-        str = re.sub("/(\d+)\s*-\s*(\d+)/", "$1-$2", str);
+        str = re.sub("(\d+)\s*-\s*(\d+)", "$1-$2", str);
         return str
 
     @staticmethod
     def url_relative_to_absolute(base, rel):
         return urljoin(base, rel)
+
+    @staticmethod
+    def format_time_iso8601_to_minutes(str):
+        # return if str is not in iso8601 format
+        if re.search('^[P,Y,D,T,H,M,S,0-9,\.]+$', str) == None:
+            return 0
+        
+        if str.find('P') == 0:
+            str = str[1:]
+        if str.find('T') == 0:
+            str = str[1:]
+
+        minutes = 0
+        # time
+        if re.search('([\d\,\.]+)([HMS])', str) != None:
+            times = re.findall('\d+[HMS]', str)
+            for time in times:
+                if time[-1] == 'H':
+                    minutes = minutes + int(time[:-1]) * 3600
+                if time[-1] == 'M':
+                    minutes = minutes + int(time[:-1]) * 60
+                if time[-1] == 'S':
+                    minutes = minutes + int(time[:-1])
+
+        return int(minutes / 60)
