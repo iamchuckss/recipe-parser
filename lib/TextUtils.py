@@ -93,3 +93,14 @@ class TextUtils:
                     minutes = minutes + int(time[:-1])
 
         return int(minutes / 60)
+
+    @staticmethod
+    def parse_instructions_from_nodes(instructions):
+        result = []
+        for instruction in instructions:
+            value = TextUtils.format_as_one_line(instruction)
+            result.append(value)
+        return result
+
+
+    

@@ -9,10 +9,6 @@ import importlib
 
 
 SCHEMA_SPEC                 = "MicrodataSchema";
-DATA_VOCABULARY_SPEC        = "MicrodataDataVocabulary";
-RDF_DATA_VOCABULARY_SPEC    = "MicrodataRdfDataVocabulary";
-MICROFORMAT_SPEC            = "Microformat";
-STRUCTURED_DATA_SPEC        = "StructuredData";
 GENERAL_PARSER              = "General"
 
 parsers_ini_file_relpath = "parsers/parsers.ini"
@@ -33,20 +29,8 @@ def get_matching_parser(url):
 
 
 def match_markup_format(html):
-    if (("application/ld+json" in html) 
-        and ("recipeIngredient" in html)
-        and ("recipeInstructions" in html)):
-        return STRUCTURED_DATA_SPEC
-    elif "//schema.org/Recipe" in html:
+    if "//schema.org/Recipe" in html:
         return SCHEMA_SPEC
-    elif "//data-vocabulary.org/Recipe" in html:
-        return DATA_VOCABULARY_SPEC
-    elif (("//rdf.data-vocabulary.org/" in html) 
-        and ("typeof=\"v:Recipe\"" in html)):
-        return RDF_DATA_VOCABULARY_SPEC
-    elif (("hrecipe" in html) 
-        and ("fn" in html)):
-        return MICROFORMAT_SPEC
     else:
         return None
         
