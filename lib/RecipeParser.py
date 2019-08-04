@@ -8,7 +8,8 @@ import configparser
 import importlib
 
 
-GENERAL_PARSER = "General"
+SCHEMA_SPEC                 = "MicrodataSchema";
+GENERAL_PARSER              = "General"
 
 parsers_ini_file_relpath = "parsers/parsers.ini"
 
@@ -27,6 +28,13 @@ def get_matching_parser(url):
         return registered_parsers[hostname]["parser"]
 
 
+def match_markup_format(html):
+    if "//schema.org/Recipe" in html:
+        return SCHEMA_SPEC
+    else:
+        return None
+        
+
 def parse(url):
     # retrieve html from url
     pageContent= requests.get(url)
@@ -38,6 +46,11 @@ def parse(url):
     # search for a registered parser that matches the URL
     if parser_name == None:
         parser_name = get_matching_parser(url)
+
+    # search for a microdata parser (data-vocabulary.org, schema.org) based
+    # upon patterns in the HTML contents
+    if parser_name == None:
+        parser_name = match_markup_format(html_content)
 
     # if none of the parsers are matched, fall back to the general parser
     if parser_name == None:
